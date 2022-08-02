@@ -1,20 +1,40 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+    FlatList,
+    StyleSheet, Text, View,
+} from 'react-native';
+import Header from "./components/Header";
+import {useState} from "react";
+import ListItem from "./components/ListItem";
+import Form from "./components/Form";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+    const [listOfItems, setListOfItems] = useState([
+        {text: 'Buy milk', key: '1',},
+        {text: 'Buy Bread', key: '2',},
+        {text: 'Drive car', key: '3',},
+        {text: 'fly in sky', key: '4',},
+    ])
+
+    const handlerAddTask = (text) => {
+        setListOfItems([{text, key: `${Math.random()}`}, ...listOfItems])
+    }
+
+    const deleteHandler = (itemKey) => {
+        setListOfItems(listOfItems.filter( item => item.key !== itemKey))
+    }
+
+    return (
+        <View>
+            <Header/>
+            <Form handlerAddTask={handlerAddTask}/>
+            <View>
+                <FlatList data={listOfItems} renderItem={({item}) => (
+                    <ListItem el={item} deleteHandler={deleteHandler}/>
+                )}/>
+            </View>
+        </View>
+    );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const styles = StyleSheet.create({});
